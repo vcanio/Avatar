@@ -32,7 +32,7 @@ const controls = {
 const avatarPresets = {
   avatarA: {
     src: "assets/Avatar1.png",
-    alt: "Avatar rizado",
+    alt: "Vicente",
     mouthX: 50,
     mouthY: 55.7,
     mouthWidth: 6.4,
@@ -40,7 +40,7 @@ const avatarPresets = {
   },
   avatarB: {
     src: "assets/Avatar2.png",
-    alt: "Avatar pelo largo",
+    alt: "Paulo",
     mouthX: 50,
     mouthY: 66.8,
     mouthWidth: 10.6,
@@ -309,12 +309,36 @@ function toggleRecordingMode(forceState) {
     appContainer.classList.add("recording-mode");
     applyStageBackground();
     showFloatingControlsTemporarily();
+
+    // Entrar en pantalla completa
+    if (!document.fullscreenElement) {
+      document.documentElement.requestFullscreen().catch((err) => {
+        console.warn("No se pudo iniciar pantalla completa:", err);
+      });
+    }
   } else {
     appContainer.classList.remove("recording-mode");
     clearStageBackground();
     hideFloatingControls();
+
+    // Salir de pantalla completa
+    if (document.fullscreenElement) {
+      document.exitFullscreen().catch((err) => {
+        console.warn("No se pudo salir de pantalla completa:", err);
+      });
+    }
   }
 }
+
+// Sincronizar el estado del modo de grabación con cambios nativos de pantalla completa (ej: presionar Escape)
+document.addEventListener("fullscreenchange", () => {
+  const isCurrentlyFullscreen = !!document.fullscreenElement;
+  const isRecordingMode = appContainer.classList.contains("recording-mode");
+  if (!isCurrentlyFullscreen && isRecordingMode) {
+    toggleRecordingMode(false);
+  }
+});
+
 
 // Event listeners del modo grabación
 recordingModeButton.addEventListener("click", () => {
