@@ -1,0 +1,165 @@
+<!doctype html>
+<html lang="es">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Presentador de avatares</title>
+    <link rel="stylesheet" href="styles.css">
+  </head>
+  <body>
+    <main class="app">
+      <section class="stage-panel" aria-label="Avatar animado">
+        <div class="topbar">
+          <div>
+            <p class="eyebrow">Web avatar</p>
+            <h1>Presentador de avatares</h1>
+          </div>
+          <div class="topbar-actions">
+            <button id="recordingModeButton" class="recording-toggle-btn" type="button">Modo Grabación</button>
+            <div class="status-pill" id="status">En pausa</div>
+          </div>
+        </div>
+
+        <div class="avatar-frame">
+          <div class="floating-control-bar" id="floatingControlBar">
+            <button id="floatMicButton" class="float-btn primary" type="button">Activar micrófono</button>
+            <button id="floatExitButton" class="float-btn" type="button">Salir de Grabación</button>
+          </div>
+
+          <div class="avatar-rig" id="avatarRig">
+            <!-- Destellos (Sparkles) animados -->
+            <div class="sparkles-container" aria-hidden="true">
+              <svg class="sparkle sp-1" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                <path d="M12 0L14.6 9.4L24 12L14.6 14.6L12 24L9.4 14.6L0 12L9.4 9.4L12 0Z" fill="#fff" />
+              </svg>
+              <svg class="sparkle sp-2" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                <path d="M12 0L14.6 9.4L24 12L14.6 14.6L12 24L9.4 14.6L0 12L9.4 9.4L12 0Z" fill="#fff" />
+              </svg>
+              <svg class="sparkle sp-3" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                <path d="M12 0L14.6 9.4L24 12L14.6 14.6L12 24L9.4 14.6L0 12L9.4 9.4L12 0Z" fill="#fff" />
+              </svg>
+              <svg class="sparkle sp-4" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                <path d="M12 0L14.6 9.4L24 12L14.6 14.6L12 24L9.4 14.6L0 12L9.4 9.4L12 0Z" fill="#fff" />
+              </svg>
+              <svg class="sparkle sp-5" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                <path d="M12 0L14.6 9.4L24 12L14.6 14.6L12 24L9.4 14.6L0 12L9.4 9.4L12 0Z" fill="#fff" />
+              </svg>
+            </div>
+            <!-- Drone animado flotando -->
+            <div class="floating-drone-container" id="floatingDrone">
+              <img src="assets/drone.png" alt="Drone" class="drone-image">
+            </div>
+            <img
+              src="assets/Avatar1.png"
+              alt="Avatar"
+              class="avatar-image"
+              id="avatarImage"
+            >
+            <div class="presentation-title" id="presentationTitle">
+              Titulo de la presentacion
+            </div>
+            <div class="mouth-slot" id="mouthSlot" aria-hidden="true">
+              <div class="mouth-cover"></div>
+              <div class="mouth-shadow"></div>
+              <div class="mouth-hole">
+                <div class="teeth"></div>
+                <div class="tongue"></div>
+              </div>
+              <div class="closed-line"></div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <aside class="controls" aria-label="Controles del avatar">
+        <div class="meter-wrap">
+          <div class="meter-label">
+            <span>Nivel</span>
+            <strong id="levelText">0%</strong>
+          </div>
+          <div class="meter" aria-hidden="true">
+            <span id="levelBar"></span>
+          </div>
+        </div>
+
+        <div class="button-row">
+          <button class="primary" id="micButton" type="button">Activar microfono</button>
+          <button id="demoButton" type="button">Demo</button>
+        </div>
+
+        <div class="control-grid">
+          <label>
+            <span>Titulo</span>
+            <input
+              id="titleInput"
+              type="text"
+              value="Titulo de la presentacion"
+              maxlength="48"
+            >
+          </label>
+
+          <label>
+            <span>Avatar</span>
+            <select id="avatarSelect">
+              <option value="avatarA">Avatar rizado</option>
+              <option value="avatarB">Avatar pelo largo</option>
+            </select>
+          </label>
+
+          <label>
+            <span>Fondo</span>
+            <select id="backgroundSelect">
+              <option value="studio">Estudio</option>
+              <option value="screen">Pantalla</option>
+              <option value="warm">Calido</option>
+              <option value="clean">Claro</option>
+              <option value="presentation">Fondo Personalizado</option>
+              <option value="chroma">Verde Croma</option>
+            </select>
+          </label>
+
+          <label>
+            <span>Sensibilidad</span>
+            <input id="sensitivity" type="range" min="2" max="24" value="10" step="0.5">
+          </label>
+
+          <label>
+            <span>Suavizado</span>
+            <input id="smoothing" type="range" min="0.02" max="0.35" value="0.16" step="0.01">
+          </label>
+
+          <label>
+            <span>Boca X</span>
+            <input id="mouthX" type="range" min="40" max="60" value="50" step="0.1">
+          </label>
+
+          <label>
+            <span>Boca Y</span>
+            <input id="mouthY" type="range" min="48" max="74" value="55.7" step="0.1">
+          </label>
+
+          <label>
+            <span>Ancho</span>
+            <input id="mouthWidth" type="range" min="4" max="14" value="6.4" step="0.1">
+          </label>
+
+          <label>
+            <span>Apertura</span>
+            <input id="maxOpen" type="range" min="1.5" max="7" value="4.7" step="0.1">
+          </label>
+
+          <label>
+            <span>Escalar Avatar</span>
+            <input id="avatarScale" type="range" min="30" max="100" value="70" step="1">
+          </label>
+        </div>
+
+        <div class="readout" id="readout">
+          Listo para hablar
+        </div>
+      </aside>
+    </main>
+
+    <script src="app.js"></script>
+  </body>
+</html>
