@@ -3,11 +3,7 @@ const avatarImage = document.querySelector("#avatarImage");
 const statusEl = document.querySelector("#status");
 const levelBar = document.querySelector("#levelBar");
 const levelText = document.querySelector("#levelText");
-const readout = document.querySelector("#readout");
 const micButton = document.querySelector("#micButton");
-const demoButton = document.querySelector("#demoButton");
-const titleInput = document.querySelector("#titleInput");
-const presentationTitle = document.querySelector("#presentationTitle");
 const avatarSelect = document.querySelector("#avatarSelect");
 const backgroundSelect = document.querySelector("#backgroundSelect");
 
@@ -56,7 +52,6 @@ let inputData;
 let source;
 let stream;
 let animationId;
-let demo = false;
 let currentOpen = 0;
 let rawLevel = 0;
 
@@ -121,13 +116,7 @@ function stopMic() {
 }
 
 function updateAudioLevel() {
-  if (demo) {
-    const t = performance.now() / 1000;
-    rawLevel =
-      0.08 +
-      Math.max(0, Math.sin(t * 4.8)) * 0.32 +
-      Math.max(0, Math.sin(t * 9.7 + 1.2)) * 0.18;
-  } else if (analyser && inputData) {
+  if (analyser && inputData) {
     analyser.getFloatTimeDomainData(inputData);
 
     let sum = 0;
@@ -140,7 +129,7 @@ function updateAudioLevel() {
 
   const sensitivity = Number(controls.sensitivity.value);
   const smoothing = Number(controls.smoothing.value);
-  const noiseFloor = demo ? 0.02 : 0.018;
+  const noiseFloor = 0.018;
   const targetOpen = clamp((rawLevel - noiseFloor) * sensitivity);
 
   currentOpen += (targetOpen - currentOpen) * smoothing;
@@ -150,10 +139,8 @@ function updateAudioLevel() {
 }
 
 async function startMic() {
-  demo = false;
   stopMic();
   setStatus("Solicitando", "");
-  readout.textContent = "El navegador espera el permiso del microfono.";
 
   try {
     stream = await navigator.mediaDevices.getUserMedia({
@@ -178,33 +165,16 @@ async function startMic() {
     floatMicButton.textContent = "Detener micrófono";
     floatMicButton.classList.remove("primary");
     setStatus("En vivo", "live");
-    readout.textContent = "Habla cerca del microfono y ajusta la sensibilidad si hace falta.";
     stopLoop();
     updateAudioLevel();
   } catch (error) {
     setStatus("Sin permiso", "");
-    readout.textContent =
-      "No pude abrir el microfono. Revisa el permiso del navegador o usa Demo.";
     micButton.textContent = "Activar microfono";
     stopMic();
   }
 }
 
-function startDemo() {
-  stopMic();
-  demo = true;
-  currentOpen = 0;
-  micButton.textContent = "Activar microfono";
-  floatMicButton.textContent = "Activar micrófono";
-  floatMicButton.classList.add("primary");
-  setStatus("Demo", "demo");
-  readout.textContent = "Demo activa.";
-  stopLoop();
-  updateAudioLevel();
-}
-
 function pauseAll() {
-  demo = false;
   stopMic();
   currentOpen = 0;
   rawLevel = 0;
@@ -213,7 +183,6 @@ function pauseAll() {
   floatMicButton.textContent = "Activar micrófono";
   floatMicButton.classList.add("primary");
   setStatus("En pausa", "");
-  readout.textContent = "Listo para hablar";
 }
 
 function applyAvatarPreset() {
@@ -237,22 +206,13 @@ function clearStageBackground() {
 }
 
 function applyBackground() {
-  rig.classList.remove(...backgroundClasses);
   clearStageBackground();
 
   if (backgroundSelect.value !== "studio") {
-    rig.classList.add(`bg-${backgroundSelect.value}`);
-  }
-
-  if (appContainer.classList.contains("recording-mode")) {
-    applyStageBackground();
+    stagePanel.classList.add(`bg-${backgroundSelect.value}`);
   }
 }
 
-function updatePresentationTitle() {
-  const title = titleInput.value.trim() || "Titulo de la presentacion";
-  presentationTitle.textContent = title;
-}
 
 Object.values(controls).forEach((control) => {
   control.addEventListener("input", applyRigControls);
@@ -260,7 +220,6 @@ Object.values(controls).forEach((control) => {
 
 avatarSelect.addEventListener("change", applyAvatarPreset);
 backgroundSelect.addEventListener("change", applyBackground);
-titleInput.addEventListener("input", updatePresentationTitle);
 
 micButton.addEventListener("click", () => {
   if (stream) {
@@ -271,17 +230,8 @@ micButton.addEventListener("click", () => {
   startMic();
 });
 
-demoButton.addEventListener("click", () => {
-  if (demo) {
-    pauseAll();
-  } else {
-    startDemo();
-  }
-});
-
 applyAvatarPreset();
 applyBackground();
-updatePresentationTitle();
 setMouth(0, 0);
 
 // Funciones del modo grabación
@@ -307,7 +257,6 @@ function toggleRecordingMode(forceState) {
 
   if (isRecording) {
     appContainer.classList.add("recording-mode");
-    applyStageBackground();
     showFloatingControlsTemporarily();
 
     // Entrar en pantalla completa
@@ -318,7 +267,6 @@ function toggleRecordingMode(forceState) {
     }
   } else {
     appContainer.classList.remove("recording-mode");
-    clearStageBackground();
     hideFloatingControls();
 
     // Salir de pantalla completa
@@ -376,5 +324,4 @@ window.addEventListener("keydown", (e) => {
 if (!navigator.mediaDevices?.getUserMedia) {
   micButton.disabled = true;
   floatMicButton.disabled = true;
-  readout.textContent = "Este navegador no expone acceso al microfono en esta pagina.";
 }

@@ -63,6 +63,11 @@ select {
   display: grid;
   grid-template-rows: auto minmax(0, 1fr);
   padding: 28px;
+  background:
+    radial-gradient(circle at 50% 26%, rgba(95, 204, 178, 0.36), transparent 32%),
+    linear-gradient(135deg, #17445e 0%, #1f6e72 48%, #102535 100%);
+  background-size: 160% 160%;
+  animation: studioAnimate 15s ease-in-out infinite alternate;
 }
 
 .topbar {
@@ -126,52 +131,11 @@ h1 {
 
 .avatar-rig {
   position: relative;
-  width: calc(min(78vh, 86vw) * (var(--avatar-scale, 70) / 100));
-  max-width: calc(820px * (var(--avatar-scale, 70) / 100));
+  width: min(78vh, 86vw);
+  max-width: 820px;
   aspect-ratio: 1;
-  border-radius: 8px;
-  overflow: hidden;
-  box-shadow: 0 28px 85px rgba(0, 0, 0, 0.42);
-  background:
-    radial-gradient(circle at 50% 26%, rgba(95, 204, 178, 0.36), transparent 32%),
-    linear-gradient(135deg, #17445e 0%, #1f6e72 48%, #102535 100%);
+  background: transparent;
   isolation: isolate;
-}
-
-.avatar-rig.bg-screen {
-  --title-bg: rgba(9, 24, 38, 0.78);
-  background:
-    linear-gradient(rgba(12, 17, 27, 0.28) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(12, 17, 27, 0.28) 1px, transparent 1px),
-    radial-gradient(circle at 50% 30%, rgba(82, 180, 255, 0.28), transparent 34%),
-    linear-gradient(135deg, #112e5b, #1c5a82 52%, #11243a);
-  background-size: 42px 42px, 42px 42px, auto, auto;
-}
-
-.avatar-rig.bg-warm {
-  --title-bg: rgba(64, 35, 16, 0.78);
-  background:
-    radial-gradient(circle at 50% 24%, rgba(255, 229, 168, 0.48), transparent 34%),
-    linear-gradient(135deg, #8e3f2c, #c5783e 52%, #4e2633);
-}
-
-.avatar-rig.bg-clean {
-  --title-bg: rgba(255, 255, 255, 0.86);
-  --title-text: #17202b;
-  background:
-    radial-gradient(circle at 50% 26%, rgba(57, 185, 142, 0.18), transparent 36%),
-    linear-gradient(135deg, #f4f6f2, #dfe9e5 52%, #c9d7dc);
-}
-
-.avatar-rig.bg-presentation {
-  --title-bg: rgba(12, 14, 18, 0.76);
-  background: transparent !important;
-}
-
-.avatar-rig.bg-chroma {
-  --title-bg: rgba(0, 0, 0, 0.8);
-  background: #00ff00 !important;
-  box-shadow: none;
 }
 
 .avatar-image {
@@ -310,7 +274,7 @@ h1 {
 
 .button-row {
   display: grid;
-  grid-template-columns: 1fr 96px;
+  grid-template-columns: 1fr;
   gap: 10px;
 }
 
@@ -569,7 +533,7 @@ select:focus {
 }
 
 .app.recording-mode .avatar-rig {
-  width: calc(min(94vh, 94vw) * (var(--avatar-scale, 70) / 100));
+  width: min(94vh, 94vw);
   max-width: none;
   border-radius: 0;
   box-shadow: none;
@@ -577,13 +541,8 @@ select:focus {
   transition: all 0.3s ease;
 }
 
-.app.recording-mode .avatar-rig::before {
-  display: none !important;
-}
-
 
 /* Animación exclusiva para el Fondo Personalizado */
-.avatar-rig.bg-presentation::before,
 .stage-panel.bg-presentation::before {
   content: "";
   position: absolute;
@@ -622,7 +581,7 @@ select:focus {
   animation: droneHover 6s ease-in-out infinite;
 }
 
-.avatar-rig.bg-presentation .floating-drone-container {
+.stage-panel.bg-presentation .floating-drone-container {
   display: block;
 }
 
@@ -660,6 +619,47 @@ select:focus {
   }
 }
 
+.avatar-character-wrap {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  transform-origin: bottom center;
+  transform: scale(calc(var(--avatar-scale, 70) / 100));
+  pointer-events: none;
+  transition: transform 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.avatar-breathe-container {
+  width: 100%;
+  height: 100%;
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  transform-origin: bottom center;
+  animation: avatarBreathe 4.5s ease-in-out infinite;
+}
+
+@keyframes avatarBreathe {
+  0%, 100% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.008, 1.018) translateY(-1.5px);
+  }
+}
+
+
+@keyframes studioAnimate {
+  0% {
+    background-position: 0% 10%;
+  }
+  100% {
+    background-position: 100% 90%;
+  }
+}
+
 /* Estilos para Sparkles (Destellos) Animados */
 .sparkles-container {
   display: none;
@@ -672,7 +672,7 @@ select:focus {
   pointer-events: none;
 }
 
-.avatar-rig.bg-presentation .sparkles-container {
+.stage-panel.bg-presentation .sparkles-container {
   display: block;
 }
 

@@ -10,10 +10,6 @@
     <main class="app">
       <section class="stage-panel" aria-label="Avatar animado">
         <div class="topbar">
-          <div>
-            <p class="eyebrow">Web avatar</p>
-            <h1>Presentador de avatares</h1>
-          </div>
           <div class="topbar-actions">
             <button id="recordingModeButton" class="recording-toggle-btn" type="button">Modo Grabación</button>
             <div class="status-pill" id="status">En pausa</div>
@@ -49,24 +45,26 @@
             <div class="floating-drone-container" id="floatingDrone">
               <img src="assets/drone.png" alt="Drone" class="drone-image">
             </div>
-            <img
-              src="assets/Avatar1.png"
-              alt="Avatar"
-              class="avatar-image"
-              id="avatarImage"
-            >
-            <div class="presentation-title" id="presentationTitle">
-              Titulo de la presentacion
-            </div>
-            <div class="mouth-slot" id="mouthSlot" aria-hidden="true">
-              <div class="mouth-cover"></div>
-              <div class="mouth-shadow"></div>
-              <div class="mouth-hole">
-                <div class="teeth"></div>
-                <div class="tongue"></div>
+            <div class="avatar-character-wrap" id="avatarCharacterWrap">
+              <div class="avatar-breathe-container">
+                <img
+                  src="assets/Avatar1.png"
+                  alt="Avatar"
+                  class="avatar-image"
+                  id="avatarImage"
+                >
+                <div class="mouth-slot" id="mouthSlot" aria-hidden="true">
+                  <div class="mouth-cover"></div>
+                  <div class="mouth-shadow"></div>
+                  <div class="mouth-hole">
+                    <div class="teeth"></div>
+                    <div class="tongue"></div>
+                  </div>
+                  <div class="closed-line"></div>
+                </div>
               </div>
-              <div class="closed-line"></div>
             </div>
+
           </div>
         </div>
       </section>
@@ -84,19 +82,9 @@
 
         <div class="button-row">
           <button class="primary" id="micButton" type="button">Activar microfono</button>
-          <button id="demoButton" type="button">Demo</button>
         </div>
 
         <div class="control-grid">
-          <label>
-            <span>Titulo</span>
-            <input
-              id="titleInput"
-              type="text"
-              value="Titulo de la presentacion"
-              maxlength="48"
-            >
-          </label>
 
           <label>
             <span>Avatar</span>
@@ -154,9 +142,7 @@
           </label>
         </div>
 
-        <div class="readout" id="readout">
-          Listo para hablar
-        </div>
+
       </aside>
     </main>
 
